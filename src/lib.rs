@@ -24,6 +24,12 @@ pub fn insertion_sort(data: Vec<u32>) -> Vec<u32> {
 mod tests {
     use super::*;
 
+    /// Get the name of the function to identify which algo failed in stdout for failing tests.
+    fn get_algo_name<T>(_: T) -> &'static str {
+        // return the type, which includes the function name
+        std::any::type_name::<T>()
+    }
+
     #[test]
     fn sorts_simple_random_data() {
         // create a vec of sorted data and a matching shuffled vec
@@ -35,6 +41,7 @@ mod tests {
 
         // iterate over the algos and test them all
         for sort in algos {
+            println!("{}", get_algo_name(sort));
             assert_eq!(sorted_data, sort(shuffled_data.clone()))
         }
     }
@@ -49,6 +56,7 @@ mod tests {
 
         // iterate over the algos and test them all
         for sort in algos {
+            println!("{}", get_algo_name(sort));
             assert_eq!(sorted_data, sort(sorted_data.clone()))
         }
     }
