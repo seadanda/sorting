@@ -1,5 +1,5 @@
 [package]
-name = "sorting-rs"
+name = "sorting"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,5 +11,5 @@ edition = "2021"
 criterion = { version = "0.5.1", features = ["html_reports"] }
 
 [[bench]]
-name = "add_benchmark"
+name = "random_data_benchmark"
 harness = false
