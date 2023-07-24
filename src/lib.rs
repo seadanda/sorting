@@ -18,7 +18,7 @@
 /// - O(1) extra space
 pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
     // Start at the left so that on each pass through the left is guaranteed sorted.
-    let mut j: usize;
+    let mut j;
 
     for i in 1..data.len() {
         let value = *data.get(i).unwrap();
@@ -41,6 +41,30 @@ pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
     data
 }
 
+pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
+    // scroll through the vec from i..n, pick the smallest and swap with the ith element
+    // values are sorted to the left of the i index as it increases
+    let mut k;
+    let mut k_value;
+    for i in 0..data.len() {
+        k = i;
+        // k_value minimises the number of times we call data.get()
+        k_value = *data.get(k).unwrap();
+
+        for j in i..data.len() {
+            if *data.get(j).unwrap() < k_value {
+                // this is the new minimum value, replace index and value
+                k = j;
+                k_value = *data.get(k).unwrap();
+            }
+        }
+
+        // unstable sort, so a swap is done after every pass through the vec
+        data.swap(i, k);
+    }
+    data
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -58,7 +82,7 @@ mod tests {
         let shuffled_data = vec![2, 5, 1, 6, 3, 4];
 
         // load the algos
-        let algos = vec![insertion_sort];
+        let algos = vec![insertion_sort, selection_sort];
 
         // iterate over the algos and test them all
         for sort in algos {
@@ -73,7 +97,7 @@ mod tests {
         let sorted_data = vec![1, 2, 3, 4, 5, 6];
 
         // load the algos
-        let algos = vec![insertion_sort];
+        let algos = vec![insertion_sort, selection_sort];
 
         // iterate over the algos and test them all
         for sort in algos {
