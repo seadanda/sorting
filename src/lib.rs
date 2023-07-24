@@ -16,7 +16,28 @@
 /// - O(n^2) worst case
 /// - O(n) when nearly sorted
 /// - O(1) extra space
-pub fn insertion_sort(data: Vec<u32>) -> Vec<u32> {
+pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
+    // Start at the left so that on each pass through the left is guaranteed sorted.
+    let mut j: usize;
+
+    for i in 1..data.len() {
+        let value = *data.get(i).unwrap();
+        j = i - 1;
+
+        // keep shifting left while it's lower than the element to its left
+        loop {
+            if value < *data.get(j).unwrap() {
+                data.swap(j + 1, j);
+            }
+
+            // when we hit leftmost element, advance to the next untested element
+            if j == 0 {
+                break;
+            }
+
+            j -= 1;
+        }
+    }
     data
 }
 
