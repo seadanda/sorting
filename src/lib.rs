@@ -65,6 +65,24 @@ pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
     data
 }
 
+pub fn bubble_sort(mut data: Vec<u32>) -> Vec<u32> {
+    let mut swapped;
+    loop {
+        swapped = false;
+        for i in 1..data.len() {
+            if data[i - 1] > data[i] {
+                data.swap(i - 1, i);
+                swapped = true;
+            }
+        }
+        if !swapped {
+            break;
+        }
+    }
+
+    data
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -82,7 +100,7 @@ mod tests {
         let shuffled_data = vec![2, 5, 1, 6, 3, 4];
 
         // load the algos
-        let algos = vec![insertion_sort, selection_sort];
+        let algos = vec![insertion_sort, selection_sort, bubble_sort];
 
         // iterate over the algos and test them all
         for sort in algos {
@@ -97,7 +115,7 @@ mod tests {
         let sorted_data = vec![1, 2, 3, 4, 5, 6];
 
         // load the algos
-        let algos = vec![insertion_sort, selection_sort];
+        let algos = vec![insertion_sort, selection_sort, bubble_sort];
 
         // iterate over the algos and test them all
         for sort in algos {
