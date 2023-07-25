@@ -21,12 +21,12 @@ pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
     let mut j;
 
     for i in 1..data.len() {
-        let value = *data.get(i).unwrap();
+        let value = data[i];
         j = i - 1;
 
         // keep shifting left while it's lower than the element to its left
         loop {
-            if value < *data.get(j).unwrap() {
+            if value < data[j] {
                 data.swap(j + 1, j);
             }
 
@@ -49,13 +49,13 @@ pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
     for i in 0..data.len() {
         k = i;
         // k_value minimises the number of times we call data.get()
-        k_value = *data.get(k).unwrap();
+        k_value = data[k];
 
         for j in i..data.len() {
-            if *data.get(j).unwrap() < k_value {
+            if data[j] < k_value {
                 // this is the new minimum value, replace index and value
                 k = j;
-                k_value = *data.get(k).unwrap();
+                k_value = data[j];
             }
         }
 
