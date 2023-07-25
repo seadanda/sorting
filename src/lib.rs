@@ -93,34 +93,53 @@ mod tests {
         std::any::type_name::<T>()
     }
 
-    #[test]
-    fn sorts_simple_random_data() {
-        // create a vec of sorted data and a matching shuffled vec
-        let sorted_data = vec![1, 2, 3, 4, 5, 6];
-        let shuffled_data = vec![2, 5, 1, 6, 3, 4];
-
-        // load the algos
+    // function which runs each algo for a given input
+    fn run_algos(unsorted: Vec<u32>, sorted: Vec<u32>) {
         let algos = vec![insertion_sort, selection_sort, bubble_sort];
 
-        // iterate over the algos and test them all
+        // iterate over the algos and test them all with the given data
         for sort in algos {
-            println!("{}", get_algo_name(sort));
-            assert_eq!(sorted_data, sort(shuffled_data.clone()))
+            dbg!(get_algo_name(&sort));
+            assert_eq!(sorted, sort(unsorted.clone()))
         }
     }
 
     #[test]
-    fn sorts_simple_sorted_data() {
+    fn they_sort_simple_random_data() {
+        // create a vec of sorted data and a matching shuffled vec
+        let sorted_data = vec![1, 2, 3, 4, 5, 6];
+        let shuffled_data = vec![2, 5, 1, 6, 3, 4];
+
+        // run over this data
+        run_algos(shuffled_data, sorted_data);
+    }
+
+    #[test]
+    fn they_sort_simple_sorted_data() {
         // create a vec of sorted data
         let sorted_data = vec![1, 2, 3, 4, 5, 6];
 
-        // load the algos
-        let algos = vec![insertion_sort, selection_sort, bubble_sort];
+        // run over this data
+        run_algos(sorted_data.clone(), sorted_data);
+    }
 
-        // iterate over the algos and test them all
-        for sort in algos {
-            println!("{}", get_algo_name(sort));
-            assert_eq!(sorted_data, sort(sorted_data.clone()))
-        }
+    #[test]
+    fn they_sort_simple_reversed_data() {
+        // create a vec of sorted data and a matching reversed vec
+        let sorted_data = vec![1, 2, 3, 4, 5, 6];
+        let reversed_data = vec![6, 5, 4, 3, 2, 1];
+
+        // run over this data
+        run_algos(reversed_data, sorted_data);
+    }
+
+    #[test]
+    fn they_sort_simple_few_unique_data() {
+        // create a vec of sorted data and a matching reversed vec
+        let sorted_data = vec![1, 1, 2, 2, 3, 3];
+        let reversed_data = vec![2, 3, 1, 3, 1, 2];
+
+        // run over this data
+        run_algos(reversed_data, sorted_data);
     }
 }
