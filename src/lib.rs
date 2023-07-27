@@ -51,11 +51,11 @@ pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
         // k_value minimises the number of times we call data.get()
         k_value = data[k];
 
-        for j in i..data.len() {
-            if data[j] < k_value {
+        for (j, &value) in data[i..].iter().enumerate() {
+            if value < k_value {
                 // this is the new minimum value, replace index and value
-                k = j;
-                k_value = data[j];
+                k = i + j;
+                k_value = value;
             }
         }
 
