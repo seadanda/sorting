@@ -83,6 +83,29 @@ pub fn bubble_sort(mut data: Vec<u32>) -> Vec<u32> {
     data
 }
 
+pub fn shell_sort(mut data: Vec<u32>) -> Vec<u32> {
+    // Compare and rearrange elements like insertion sort but with intervals > 1
+    // n/2, n/4, ... 1 decreasing intervals
+    let mut interval = data.len() / 2;
+    let mut j;
+    let mut temp;
+
+    while interval > 0 {
+        for i in interval..data.len() {
+            temp = data[i];
+            j = i;
+
+            while j >= interval && data[j - interval] > temp {
+                data.swap(j, j - interval);
+                j -= interval;
+            }
+        }
+        // normal div of two integers gives us the floor
+        interval /= 2;
+    }
+    data
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -95,7 +118,7 @@ mod tests {
 
     // function which runs each algo for a given input
     fn run_algos(unsorted: Vec<u32>, sorted: Vec<u32>) {
-        let algos = vec![insertion_sort, selection_sort, bubble_sort];
+        let algos = vec![insertion_sort, selection_sort, bubble_sort, shell_sort];
 
         // iterate over the algos and test them all with the given data
         for sort in algos {
