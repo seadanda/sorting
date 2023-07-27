@@ -106,23 +106,66 @@ pub fn shell_sort(mut data: Vec<u32>) -> Vec<u32> {
     data
 }
 
+pub fn merge_sort(mut data: Vec<u32>) -> Vec<u32> {
+    if data.len() == 1 {
+        return data;
+    }
+
+    let r = data.len() / 2;
+    let sub_a: Vec<u32> = data[..r].to_vec();
+    let sub_b: Vec<u32> = data[r..].to_vec();
+
+    let sub_a = merge_sort(sub_a);
+    let sub_b = merge_sort(sub_b);
+
+    let mut i = 0;
+    let mut j = 0;
+    let mut k = 0;
+
+    while i < sub_a.len() && j < sub_b.len() {
+        if sub_a[i] < sub_b[j] {
+            println!("{} < {}", sub_a[i], sub_b[j]);
+            data[k] = sub_a[i];
+            i += 1;
+        } else {
+            println!("{} >= {}", sub_a[i], sub_b[j]);
+            data[k] = sub_b[j];
+            j += 1;
+        }
+        k += 1;
+    }
+
+    while i < sub_a.len() {
+        data[k] = sub_a[i];
+        i += 1;
+        k += 1;
+    }
+
+    while j < sub_b.len() {
+        data[k] = sub_b[j];
+        j += 1;
+        k += 1;
+    }
+
+    data
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    /// Get the name of the function to identify which algo failed in stdout for failing tests.
-    fn get_algo_name<T>(_: T) -> &'static str {
-        // return the type, which includes the function name
-        std::any::type_name::<T>()
-    }
-
     // function which runs each algo for a given input
     fn run_algos(unsorted: Vec<u32>, sorted: Vec<u32>) {
-        let algos = vec![insertion_sort, selection_sort, bubble_sort, shell_sort];
+        let algos = vec![
+            insertion_sort,
+            selection_sort,
+            bubble_sort,
+            shell_sort,
+            merge_sort,
+        ];
 
         // iterate over the algos and test them all with the given data
         for sort in algos {
-            dbg!(get_algo_name(&sort));
             assert_eq!(sorted, sort(unsorted.clone()))
         }
     }
