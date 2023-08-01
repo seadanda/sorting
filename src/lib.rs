@@ -48,7 +48,6 @@ pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
     let mut k_value;
     for i in 0..data.len() {
         k = i;
-        // k_value minimises the number of times we call data.get()
         k_value = data[k];
 
         for (j, &value) in data[i..].iter().enumerate() {
@@ -84,7 +83,7 @@ pub fn bubble_sort(mut data: Vec<u32>) -> Vec<u32> {
 }
 
 pub fn shell_sort(mut data: Vec<u32>) -> Vec<u32> {
-    // Compare and rearrange elements like insertion sort but with intervals > 1
+    // Compare and rearrange elements like insertion sort but with comparison across intervals > 1
     // n/2, n/4, ... 1 decreasing intervals
     let mut interval = data.len() / 2;
     let mut j;
@@ -124,11 +123,9 @@ pub fn merge_sort(mut data: Vec<u32>) -> Vec<u32> {
 
     while i < sub_a.len() && j < sub_b.len() {
         if sub_a[i] < sub_b[j] {
-            println!("{} < {}", sub_a[i], sub_b[j]);
             data[k] = sub_a[i];
             i += 1;
         } else {
-            println!("{} >= {}", sub_a[i], sub_b[j]);
             data[k] = sub_b[j];
             j += 1;
         }
@@ -148,6 +145,43 @@ pub fn merge_sort(mut data: Vec<u32>) -> Vec<u32> {
     }
 
     data
+}
+
+pub fn heap_sort(mut data: Vec<u32>) -> Vec<u32> {
+    // build min heap
+    let full_len = data.len(); // temporary until I rework all fn signatures
+    for i in (0..data.len() / 2).rev() {
+        heapify(&mut data, full_len, i);
+    }
+
+    // extract elements from heap
+    for i in (1..data.len()).rev() {
+        data.swap(0, i);
+        heapify(&mut data, i, 0);
+    }
+
+    data
+}
+
+fn heapify(data: &mut Vec<u32>, len: usize, root: usize) {
+    let mut smallest = root;
+    let left = 2 * root + 1;
+    let right = 2 * root + 2;
+
+    // grab both children and compare
+    if left < len && data[left] < data[smallest] {
+        smallest = left;
+    }
+
+    if right < len && data[right] < data[smallest] {
+        smallest = right;
+    }
+
+    // ensure that root is always min for min heap
+    if smallest != root {
+        data.swap(root, smallest);
+        heapify(data, len, smallest);
+    }
 }
 
 #[cfg(test)]
