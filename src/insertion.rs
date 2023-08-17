@@ -1,8 +1,23 @@
+/// Sorts the given slice using the insertion sort algorithm.
 /// Very low overhead and adaptive, with good performance when nearly sorted
 /// - Stable
 /// - O(n^1) worst case
 /// - O(n) when nearly sorted
 /// - O(0) extra space
+///
+/// # Arguments
+///
+/// * `data` - A mutable reference to a slice of elements that implement the `PartialOrd` trait.
+///
+/// # Examples
+///
+/// ```
+/// use sorting::insertion_sort;
+///
+/// let mut data = [3, 1, 2];
+/// insertion_sort(&mut data);
+/// assert_eq!(data, [1, 2, 3]);
+/// ```
 pub fn insertion_sort<T: PartialOrd>(data: &mut [T]) {
     // Start at the left so that on each pass through the left is guaranteed sorted.
 

@@ -1,3 +1,18 @@
+/// Sorts the elements of a mutable slice using the quicksort algorithm.
+///
+/// # Arguments
+///
+/// * `data` - A mutable slice of elements that implement the `PartialOrd` trait.
+///
+/// # Examples
+///
+/// ```
+/// use sorting::quick_sort;
+///
+/// let mut data = [3, 1, 2];
+/// quick_sort(&mut data);
+/// assert_eq!(data, [1, 2, 3]);
+/// ```
 pub fn quick_sort<T: PartialOrd>(data: &mut [T]) {
     if data.len() <= 1 {
         return;

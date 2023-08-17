@@ -1,3 +1,18 @@
+/// Sorts the elements of a mutable slice using the Shell sort algorithm.
+///
+/// # Arguments
+///
+/// * `data` - A mutable reference to a slice of elements that implement the `PartialOrd` trait.
+///
+/// # Examples
+///
+/// ```
+/// use sorting::shell_sort;
+///
+/// let mut data = [3, 1, 2];
+/// shell_sort(&mut data);
+/// assert_eq!(data, [1, 2, 3]);
+/// ```
 pub fn shell_sort<T: PartialOrd>(data: &mut [T]) {
     // Compare and rearrange elements like insertion sort but with comparison across intervals > 1
     // n/2, n/4, ... 1 decreasing intervals

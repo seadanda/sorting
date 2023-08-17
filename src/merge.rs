@@ -1,3 +1,18 @@
+/// Sorts the elements of a mutable slice using the merge sort algorithm.
+///
+/// # Arguments
+///
+/// * `data` - A mutable slice of elements that implement the `PartialOrd` and `Clone` traits.
+///
+/// # Examples
+///
+/// ```
+/// use sorting::merge_sort;
+///
+/// let mut data = [3, 1, 2];
+/// merge_sort(&mut data);
+/// assert_eq!(data, [1, 2, 3]);
+/// ```
 pub fn merge_sort<T: PartialOrd + Clone>(data: &mut [T]) {
     if data.len() <= 1 {
         return;
