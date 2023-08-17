@@ -16,11 +16,7 @@
 /// - O(n^2) worst case
 /// - O(n) when nearly sorted
 /// - O(1) extra space
-pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
-    if data.len() <= 1 {
-        return data;
-    }
-
+pub fn insertion_sort(data: &mut [u32]) {
     // Start at the left so that on each pass through the left is guaranteed sorted.
     let mut j;
 
@@ -42,14 +38,9 @@ pub fn insertion_sort(mut data: Vec<u32>) -> Vec<u32> {
             j -= 1;
         }
     }
-    data
 }
 
-pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
-    if data.len() <= 1 {
-        return data;
-    }
-
+pub fn selection_sort(data: &mut [u32]) {
     // scroll through the vec from i..n, pick the smallest and swap with the ith element
     // values are sorted to the left of the i index as it increases
     let mut k;
@@ -69,14 +60,9 @@ pub fn selection_sort(mut data: Vec<u32>) -> Vec<u32> {
         // unstable sort, so a swap is done after every pass through the vec
         data.swap(i, k);
     }
-    data
 }
 
-pub fn bubble_sort(mut data: Vec<u32>) -> Vec<u32> {
-    if data.len() <= 1 {
-        return data;
-    }
-
+pub fn bubble_sort(data: &mut [u32]) {
     let mut swapped;
     loop {
         swapped = false;
@@ -90,15 +76,9 @@ pub fn bubble_sort(mut data: Vec<u32>) -> Vec<u32> {
             break;
         }
     }
-
-    data
 }
 
-pub fn shell_sort(mut data: Vec<u32>) -> Vec<u32> {
-    if data.len() <= 1 {
-        return data;
-    }
-
+pub fn shell_sort(data: &mut [u32]) {
     // Compare and rearrange elements like insertion sort but with comparison across intervals > 1
     // n/2, n/4, ... 1 decreasing intervals
     let mut interval = data.len() / 2;
@@ -118,20 +98,19 @@ pub fn shell_sort(mut data: Vec<u32>) -> Vec<u32> {
         // normal div of two integers gives us the floor
         interval /= 2;
     }
-    data
 }
 
-pub fn merge_sort(mut data: Vec<u32>) -> Vec<u32> {
+pub fn merge_sort(data: &mut [u32]) {
     if data.len() <= 1 {
-        return data;
+        return;
     }
 
     let r = data.len() / 2;
-    let sub_a: Vec<u32> = data[..r].to_vec();
-    let sub_b: Vec<u32> = data[r..].to_vec();
+    let mut sub_a: Vec<u32> = data[..r].to_vec();
+    let mut sub_b: Vec<u32> = data[r..].to_vec();
 
-    let sub_a = merge_sort(sub_a);
-    let sub_b = merge_sort(sub_b);
+    merge_sort(&mut sub_a);
+    merge_sort(&mut sub_b);
 
     let mut i = 0;
     let mut j = 0;
@@ -159,74 +138,58 @@ pub fn merge_sort(mut data: Vec<u32>) -> Vec<u32> {
         j += 1;
         k += 1;
     }
-
-    data
 }
 
-pub fn heap_sort(mut data: Vec<u32>) -> Vec<u32> {
-    if data.len() <= 1 {
-        return data;
-    }
-
-    // build min heap
-    let full_len = data.len(); // temporary until I rework all fn signatures
+pub fn heap_sort(data: &mut [u32]) {
+    // create max heap
     for i in (0..data.len() / 2).rev() {
-        heapify(&mut data, full_len, i);
+        heapify(data, data.len(), i);
     }
 
     // extract elements from heap
     for i in (1..data.len()).rev() {
         data.swap(0, i);
-        heapify(&mut data, i, 0);
+        heapify(data, i, 0);
     }
-
-    data
 }
 
-fn heapify(data: &mut Vec<u32>, len: usize, root: usize) {
-    let mut smallest = root;
+fn heapify(data: &mut [u32], len: usize, root: usize) {
+    let mut largest = root;
     let left = 2 * root + 1;
     let right = 2 * root + 2;
 
     // grab both children and compare
-    if left < len && data[left] < data[smallest] {
-        smallest = left;
+    if left < len && data[left] > data[largest] {
+        largest = left;
     }
 
-    if right < len && data[right] < data[smallest] {
-        smallest = right;
+    if right < len && data[right] > data[largest] {
+        largest = right;
     }
 
-    // ensure that root is always min for min heap
-    if smallest != root {
-        data.swap(root, smallest);
-        heapify(data, len, smallest);
+    // ensure that root is always max
+    if largest != root {
+        data.swap(root, largest);
+        heapify(data, len, largest);
     }
 }
 
-pub fn quick_sort(mut data: Vec<u32>) -> Vec<u32> {
+pub fn quick_sort(data: &mut [u32]) {
     if data.len() <= 1 {
-        return data;
+        return;
     }
 
     // divide and conquer => recursive
 
     // select pivot and order data
-    let pivot = partition(&mut data);
+    let pivot = partition(data);
 
     // recurse into both sides
-    let left = quick_sort(data[..pivot].to_vec());
-    let right = quick_sort(data[pivot + 1..].to_vec());
-
-    let mut result = vec![];
-    result.extend(left);
-    result.push(data[pivot]);
-    result.extend(right);
-
-    result
+    quick_sort(&mut data[..pivot]);
+    quick_sort(&mut data[pivot + 1..]);
 }
 
-fn partition(data: &mut Vec<u32>) -> usize {
+fn partition(data: &mut [u32]) -> usize {
     let pivot = data.len() - 1;
     let mut i = 0;
 
@@ -248,17 +211,21 @@ mod tests {
 
     // function which runs each algo for a given input
     fn run_algos(unsorted: Vec<u32>, sorted: Vec<u32>) {
-        let algos = vec![
+        let algos = [
             insertion_sort,
             selection_sort,
             bubble_sort,
             shell_sort,
             merge_sort,
+            heap_sort,
+            quick_sort,
         ];
 
         // iterate over the algos and test them all with the given data
         for sort in algos {
-            assert_eq!(sorted, sort(unsorted.clone()))
+            let mut data = unsorted.clone();
+            sort(&mut data);
+            assert_eq!(sorted, data)
         }
     }
 

@@ -13,7 +13,6 @@ I'll start off with a short list from [Toptal](https://www.toptal.com/developers
 - Merge
 - Heap
 - Quick
-- Quick3
 
 I'd like to implement them all naively first from first principles and then work on optimising to improve performance and memory usage and explore any tradeoffs. Then I'll look at their implementation in crates etc and see what I've missed out on.
 
