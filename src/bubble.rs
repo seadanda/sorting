@@ -1,4 +1,4 @@
-pub fn bubble_sort(data: &mut [u32]) {
+pub fn bubble_sort<T: PartialOrd>(data: &mut [T]) {
     let mut swapped;
     loop {
         swapped = false;

@@ -10,6 +10,7 @@
 //! - Adaptive: Speeds up to O(n) when data is nearly sorted or when there are few unique keys.
 //!
 //! In the docs the descriptions focus on highlighting main features instead of repeating the algo name.
+
 pub mod bubble;
 pub mod heap;
 pub mod insertion;

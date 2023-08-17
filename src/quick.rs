@@ -1,4 +1,4 @@
-pub fn quick_sort(data: &mut [u32]) {
+pub fn quick_sort<T: PartialOrd>(data: &mut [T]) {
     if data.len() <= 1 {
         return;
     }
@@ -13,7 +13,7 @@ pub fn quick_sort(data: &mut [u32]) {
     quick_sort(&mut data[pivot + 1..]);
 }
 
-fn partition(data: &mut [u32]) -> usize {
+fn partition<T: PartialOrd>(data: &mut [T]) -> usize {
     let pivot = data.len() - 1;
     let mut i = 0;
 

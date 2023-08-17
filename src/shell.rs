@@ -1,16 +1,13 @@
-pub fn shell_sort(data: &mut [u32]) {
+pub fn shell_sort<T: PartialOrd>(data: &mut [T]) {
     // Compare and rearrange elements like insertion sort but with comparison across intervals > 1
     // n/2, n/4, ... 1 decreasing intervals
     let mut interval = data.len() / 2;
-    let mut j;
-    let mut temp;
 
     while interval > 0 {
         for i in interval..data.len() {
-            temp = data[i];
-            j = i;
+            let mut j = i;
 
-            while j >= interval && data[j - interval] > temp {
+            while j >= interval && data[j - interval] > data[j] {
                 data.swap(j, j - interval);
                 j -= interval;
             }

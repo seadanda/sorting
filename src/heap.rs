@@ -1,4 +1,4 @@
-pub fn heap_sort(data: &mut [u32]) {
+pub fn heap_sort<T: PartialOrd>(data: &mut [T]) {
     // create max heap
     for i in (0..data.len() / 2).rev() {
         heapify(data, data.len(), i);
@@ -11,7 +11,7 @@ pub fn heap_sort(data: &mut [u32]) {
     }
 }
 
-fn heapify(data: &mut [u32], len: usize, root: usize) {
+fn heapify<T: PartialOrd>(data: &mut [T], len: usize, root: usize) {
     let mut largest = root;
     let left = 2 * root + 1;
     let right = 2 * root + 2;

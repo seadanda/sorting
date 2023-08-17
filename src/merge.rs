@@ -1,38 +1,39 @@
-pub fn merge_sort(data: &mut [u32]) {
+pub fn merge_sort<T: PartialOrd + Clone>(data: &mut [T]) {
     if data.len() <= 1 {
         return;
     }
 
-    let r = data.len() / 2;
-    let mut sub_a: Vec<u32> = data[..r].to_vec();
-    let mut sub_b: Vec<u32> = data[r..].to_vec();
+    let mid = data.len() / 2;
 
-    merge_sort(&mut sub_a);
-    merge_sort(&mut sub_b);
+    merge_sort(&mut data[..mid]);
+    merge_sort(&mut data[mid..]);
 
     let mut i = 0;
     let mut j = 0;
     let mut k = 0;
 
-    while i < sub_a.len() && j < sub_b.len() {
-        if sub_a[i] < sub_b[j] {
-            data[k] = sub_a[i];
+    let left = &data[..mid].to_vec();
+    let right = &data[mid..].to_vec();
+
+    while i < left.len() && j < right.len() {
+        if left[i] < right[j] {
+            data[k] = left[i].clone();
             i += 1;
         } else {
-            data[k] = sub_b[j];
+            data[k] = right[j].clone();
             j += 1;
         }
         k += 1;
     }
 
-    while i < sub_a.len() {
-        data[k] = sub_a[i];
+    while i < left.len() {
+        data[k] = left[i].clone();
         i += 1;
         k += 1;
     }
 
-    while j < sub_b.len() {
-        data[k] = sub_b[j];
+    while j < right.len() {
+        data[k] = right[j].clone();
         j += 1;
         k += 1;
     }
