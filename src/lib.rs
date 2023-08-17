@@ -10,200 +10,21 @@
 //! - Adaptive: Speeds up to O(n) when data is nearly sorted or when there are few unique keys.
 //!
 //! In the docs the descriptions focus on highlighting main features instead of repeating the algo name.
+pub mod bubble;
+pub mod heap;
+pub mod insertion;
+pub mod merge;
+pub mod quick;
+pub mod selection;
+pub mod shell;
 
-/// Very low overhead and adaptive, with good performance when nearly sorted
-/// - Stable
-/// - O(n^2) worst case
-/// - O(n) when nearly sorted
-/// - O(1) extra space
-pub fn insertion_sort(data: &mut [u32]) {
-    // Start at the left so that on each pass through the left is guaranteed sorted.
-    let mut j;
-
-    for i in 1..data.len() {
-        let value = data[i];
-        j = i - 1;
-
-        // keep shifting left while it's lower than the element to its left
-        loop {
-            if value < data[j] {
-                data.swap(j + 1, j);
-            }
-
-            // when we hit leftmost element, advance to the next untested element
-            if j == 0 {
-                break;
-            }
-
-            j -= 1;
-        }
-    }
-}
-
-pub fn selection_sort(data: &mut [u32]) {
-    // scroll through the vec from i..n, pick the smallest and swap with the ith element
-    // values are sorted to the left of the i index as it increases
-    let mut k;
-    let mut k_value;
-    for i in 0..data.len() {
-        k = i;
-        k_value = data[k];
-
-        for (j, &value) in data[i..].iter().enumerate() {
-            if value < k_value {
-                // this is the new minimum value, replace index and value
-                k = i + j;
-                k_value = value;
-            }
-        }
-
-        // unstable sort, so a swap is done after every pass through the vec
-        data.swap(i, k);
-    }
-}
-
-pub fn bubble_sort(data: &mut [u32]) {
-    let mut swapped;
-    loop {
-        swapped = false;
-        for i in 1..data.len() {
-            if data[i - 1] > data[i] {
-                data.swap(i - 1, i);
-                swapped = true;
-            }
-        }
-        if !swapped {
-            break;
-        }
-    }
-}
-
-pub fn shell_sort(data: &mut [u32]) {
-    // Compare and rearrange elements like insertion sort but with comparison across intervals > 1
-    // n/2, n/4, ... 1 decreasing intervals
-    let mut interval = data.len() / 2;
-    let mut j;
-    let mut temp;
-
-    while interval > 0 {
-        for i in interval..data.len() {
-            temp = data[i];
-            j = i;
-
-            while j >= interval && data[j - interval] > temp {
-                data.swap(j, j - interval);
-                j -= interval;
-            }
-        }
-        // normal div of two integers gives us the floor
-        interval /= 2;
-    }
-}
-
-pub fn merge_sort(data: &mut [u32]) {
-    if data.len() <= 1 {
-        return;
-    }
-
-    let r = data.len() / 2;
-    let mut sub_a: Vec<u32> = data[..r].to_vec();
-    let mut sub_b: Vec<u32> = data[r..].to_vec();
-
-    merge_sort(&mut sub_a);
-    merge_sort(&mut sub_b);
-
-    let mut i = 0;
-    let mut j = 0;
-    let mut k = 0;
-
-    while i < sub_a.len() && j < sub_b.len() {
-        if sub_a[i] < sub_b[j] {
-            data[k] = sub_a[i];
-            i += 1;
-        } else {
-            data[k] = sub_b[j];
-            j += 1;
-        }
-        k += 1;
-    }
-
-    while i < sub_a.len() {
-        data[k] = sub_a[i];
-        i += 1;
-        k += 1;
-    }
-
-    while j < sub_b.len() {
-        data[k] = sub_b[j];
-        j += 1;
-        k += 1;
-    }
-}
-
-pub fn heap_sort(data: &mut [u32]) {
-    // create max heap
-    for i in (0..data.len() / 2).rev() {
-        heapify(data, data.len(), i);
-    }
-
-    // extract elements from heap
-    for i in (1..data.len()).rev() {
-        data.swap(0, i);
-        heapify(data, i, 0);
-    }
-}
-
-fn heapify(data: &mut [u32], len: usize, root: usize) {
-    let mut largest = root;
-    let left = 2 * root + 1;
-    let right = 2 * root + 2;
-
-    // grab both children and compare
-    if left < len && data[left] > data[largest] {
-        largest = left;
-    }
-
-    if right < len && data[right] > data[largest] {
-        largest = right;
-    }
-
-    // ensure that root is always max
-    if largest != root {
-        data.swap(root, largest);
-        heapify(data, len, largest);
-    }
-}
-
-pub fn quick_sort(data: &mut [u32]) {
-    if data.len() <= 1 {
-        return;
-    }
-
-    // divide and conquer => recursive
-
-    // select pivot and order data
-    let pivot = partition(data);
-
-    // recurse into both sides
-    quick_sort(&mut data[..pivot]);
-    quick_sort(&mut data[pivot + 1..]);
-}
-
-fn partition(data: &mut [u32]) -> usize {
-    let pivot = data.len() - 1;
-    let mut i = 0;
-
-    // check if less than pivot and swap
-    for j in 0..pivot {
-        if data[j] < data[pivot] {
-            data.swap(i, j);
-            i += 1;
-        }
-    }
-
-    data.swap(i, pivot);
-    i
-}
+pub use bubble::bubble_sort;
+pub use heap::heap_sort;
+pub use insertion::insertion_sort;
+pub use merge::merge_sort;
+pub use quick::quick_sort;
+pub use selection::selection_sort;
+pub use shell::shell_sort;
 
 #[cfg(test)]
 mod tests {
