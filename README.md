@@ -24,5 +24,3 @@ Any tasks I'm pushing to the end. Currently these are queued after the naive fir
 
 - [ ] Increase random dataset size.
 - [ ] Add data generator module for shared code between tests and benches.
-- [x] Add nearly sorted, reversed and few unique datasets.
-- [ ] Refactor all indexy solutions to iterators
