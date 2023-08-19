@@ -8,8 +8,6 @@
 //! - Worst-case O(n·lg(n)) key comparisons.
 //! - Worst-case O(n) swaps.
 //! - Adaptive: Speeds up to O(n) when data is nearly sorted or when there are few unique keys.
-//!
-//! In the docs the descriptions focus on highlighting main features instead of repeating the algo name.
 
 mod bubble;
 mod heap;
