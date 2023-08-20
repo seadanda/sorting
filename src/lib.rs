@@ -25,6 +25,54 @@ pub use quick::quick_sort;
 pub use selection::selection_sort;
 pub use shell::shell_sort;
 
+pub enum Algos {
+    Bubble,
+    Heap,
+    Insertion,
+    Merge,
+    Quick,
+    Selection,
+    Shell,
+}
+
+/// A trait for types that can be sorted
+pub trait Sortable<T> {
+    fn sort_with(&mut self, _algo: Algos) {}
+}
+
+impl<T: PartialOrd + Clone, U: ?Sized + AsMut<[T]>> Sortable<T> for U {
+    /// Sorts the collection in place using the specified algorithm
+    ///
+    /// # Arguments
+    ///
+    /// * `algo` - The algorithm to use for sorting.
+    ///
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use sorting::{Algos, Sortable};
+    ///
+    /// let mut testvec = [2, 3, 1, 4, 5, 6];
+    /// testvec.sort_with(Algos::Bubble);
+    /// assert_eq!(testvec, [1, 2, 3, 4, 5, 6]);
+    /// ```
+
+    fn sort_with(&mut self, algo: Algos) {
+        let mut_slice = self.as_mut();
+        let sort_with = match algo {
+            Algos::Bubble => bubble_sort,
+            Algos::Heap => heap_sort,
+            Algos::Insertion => insertion_sort,
+            Algos::Merge => merge_sort,
+            Algos::Quick => quick_sort,
+            Algos::Selection => selection_sort,
+            Algos::Shell => shell_sort,
+        };
+        sort_with(mut_slice);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -86,5 +134,21 @@ mod tests {
 
         // run over this data
         run_algos(reversed_data, sorted_data);
+    }
+
+    #[test]
+    fn vec_char_derives_sort_method() {
+        let mut testvec = vec!['2', '3', '4', '1', '5', '6'];
+        testvec.sort_with(Algos::Bubble);
+
+        assert_eq!(testvec, vec!['1', '2', '3', '4', '5', '6'])
+    }
+
+    #[test]
+    fn vec_i32_derives_bubble_sort_method() {
+        let mut testvec = vec![2, 3, 4, 1, 5, 6];
+        testvec.sort_with(Algos::Bubble);
+
+        assert_eq!(testvec, vec![1, 2, 3, 4, 5, 6]);
     }
 }
